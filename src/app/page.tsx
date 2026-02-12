@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 const insights = [
   {
     title: "Signal Fusion Engine",
@@ -34,6 +36,10 @@ const workflows = [
 ]
 
 export default function Home() {
+  const googleEnabled = Boolean(
+    process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+  )
+
   return (
     <main className="min-h-screen text-ink-900">
       <section className="hero-grid relative overflow-hidden">
@@ -273,12 +279,20 @@ export default function Home() {
                 placeholder="Password"
                 type="password"
               />
-              <button className="rounded-xl bg-ink-900 text-white py-3 text-sm">
+              <Link
+                href="/auth/signin"
+                className="rounded-xl bg-ink-900 text-white py-3 text-sm text-center"
+              >
                 Sign in
-              </button>
-              <button className="rounded-xl border border-ink-200 text-ink-700 py-3 text-sm">
-                Continue with Google
-              </button>
+              </Link>
+              {googleEnabled ? (
+                <Link
+                  href="/api/auth/signin/google"
+                  className="rounded-xl border border-ink-200 text-ink-700 py-3 text-sm text-center"
+                >
+                  Continue with Google
+                </Link>
+              ) : null}
             </div>
           </div>
         </div>

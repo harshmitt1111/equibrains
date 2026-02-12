@@ -1,0 +1,23 @@
+[
+  {
+    "id": "efaedf26-861a-4ccc-9394-ad4adca072fd",
+    "email": "test@example.com",
+    "name": "Test User",
+    "hashedPassword": "$2a$10$EoJSbTl2dOu8EoyuRL/dJ.OLT60D9sJVioedzWkB5iY3RXdMcGlBy",
+    "createdAt": "2026-02-12T16:57:00.644Z"
+  },
+  {
+    "id": "ee61dcb9-f24a-4b99-8322-4437b6484d47",
+    "email": "harshm1111@outlook.in",
+    "name": "Harsh",
+    "hashedPassword": "$2a$10$hQIqT7O1keNVHwUqmEtfVeSjXJiaT566VMw4.3qfqb7gkZ7B7EcU6",
+    "createdAt": "2026-02-12T17:01:55.134Z"
+  },
+  {
+    "id": "04b04f60-1afb-4336-a499-ea8b2876b121",
+    "email": "hmr12815@test.com",
+    "name": "Harsh",
+    "hashedPassword": "$2a$10$cq79QouPK6NtGDuda/buf.ulQmsiD/ZHMUHw9kHi.UMvPYexAriDu",
+    "createdAt": "2026-02-12T21:51:16.341Z"
+  }
+]

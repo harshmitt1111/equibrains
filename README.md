@@ -1,24 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+EquiBrains is a Next.js app with NextAuth authentication and optional Prisma/Postgres persistence.
 
 ## Getting Started
 
-First, run the development server:
+### 1) Configure environment variables
+
+Copy `.env.example` to `.env` and fill in at least:
+
+- `NEXTAUTH_SECRET` (any strong random string)
+
+Google SSO is optional; only set `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` if you want “Continue with Google”.
+
+### 2) Install dependencies
+
+```bash
+npm install
+```
+
+### 3) Run without a database (default)
+
+Credentials users are stored in a local file at `.data/users.json`, created automatically after sign-up.
+
+### 4) Optional: Create/update the database schema
+
+```bash
+npm run db:migrate
+```
+
+If you don't want migrations yet, you can use:
+
+```bash
+npm run db:push
+```
+
+### 5) Run the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 6) Create an account + sign in
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Sign up: `/auth/signup`
+- Sign in: `/auth/signin`
+
+## Notes
+
+- Auth routes run on the Node.js runtime (required for Prisma + NextAuth).
 
 ## Learn More
 

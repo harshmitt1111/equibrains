@@ -1,3 +1,5 @@
+import PredictionPanel from "@/app/components/PredictionPanel"
+
 const holdings = [
   { name: "Reliance Industries", symbol: "RELIANCE", weight: "18%", signal: "Conviction" },
   { name: "Tata Consultancy", symbol: "TCS", weight: "12%", signal: "Watch" },
@@ -109,6 +111,22 @@ export default function Dashboard() {
       </section>
 
       <section className="max-w-6xl mx-auto px-6 pb-20">
+        <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-6 mb-10">
+          <div className="rounded-[28px] border border-ink-200 bg-white p-6">
+            <p className="text-xs uppercase tracking-[0.3em] text-ink-500">
+              Prediction Workspace
+            </p>
+            <h2 className="text-lg font-semibold mt-3">
+              Your AI model, embedded.
+            </h2>
+            <p className="text-sm text-ink-500 mt-2">
+              Trigger your local model command, store every run, and compare
+              confidence across symbols in one place.
+            </p>
+          </div>
+          <PredictionPanel />
+        </div>
+
         <div className="grid md:grid-cols-3 gap-6">
           {sentiment.map((item) => (
             <div
