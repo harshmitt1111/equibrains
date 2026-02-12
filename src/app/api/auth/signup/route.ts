@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
-import { createLocalUser, findLocalUserByEmail } from "@/lib/localUsers"
+import { prisma } from "@/lib/prisma"
 
 export const runtime = "nodejs"
 
@@ -18,7 +18,10 @@ export async function POST(req: Request) {
       )
     }
 
-    const existing = await findLocalUserByEmail(email)
+    const existing = await prisma.user.findUnique({
+      where: { email },
+      select: { id: true },
+    })
     if (existing) {
       return NextResponse.json(
         { error: "User already exists." },
@@ -28,17 +31,18 @@ export async function POST(req: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    await createLocalUser({ email, name, hashedPassword })
+    await prisma.user.create({
+      data: {
+        email,
+        name,
+        password: hashedPassword,
+      },
+      select: { id: true },
+    })
 
     return NextResponse.json({ ok: true })
   } catch (error: unknown) {
-    if (error instanceof Error && error.message === "USER_EXISTS") {
-      return NextResponse.json(
-        { error: "User already exists." },
-        { status: 409 }
-      )
-    }
-
+    console.error("SIGNUP ERROR:", error)
     return NextResponse.json(
       { error: "Unable to create user." },
       { status: 500 }

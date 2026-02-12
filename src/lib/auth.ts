@@ -2,7 +2,7 @@ import type { NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
-import { findLocalUserByEmail } from "@/lib/localUsers"
+import { prisma } from "@/lib/prisma"
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID?.trim()
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim()
@@ -33,11 +33,19 @@ export const authOptions: NextAuthOptions = {
 
         if (!email || !password) return null
 
-        const user = await findLocalUserByEmail(email)
+        const user = await prisma.user.findUnique({
+          where: { email },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            password: true,
+          },
+        })
 
-        if (!user?.hashedPassword) return null
+        if (!user?.password || !user.email) return null
 
-        const isValid = await bcrypt.compare(password, user.hashedPassword)
+        const isValid = await bcrypt.compare(password, user.password)
         if (!isValid) return null
 
         return {
