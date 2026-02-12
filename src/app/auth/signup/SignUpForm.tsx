@@ -3,8 +3,10 @@
 import { useState } from "react"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function SignUpForm({ googleEnabled }: { googleEnabled: boolean }) {
+  const router = useRouter()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -16,25 +18,40 @@ export default function SignUpForm({ googleEnabled }: { googleEnabled: boolean }
     setError(null)
     setLoading(true)
 
-    const response = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
-    })
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      })
 
-    setLoading(false)
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}))
+        setError(payload?.error ?? "Unable to create account.")
+        return
+      }
 
-    if (!response.ok) {
-      const payload = await response.json().catch(() => ({}))
-      setError(payload?.error ?? "Unable to create account.")
-      return
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: "/ai-analysis",
+      })
+
+      if (result?.error) {
+        setError("Account created. Please sign in to continue.")
+        router.push("/auth/signin")
+        return
+      }
+
+      if (result?.url) {
+        router.push(result.url)
+      }
+    } catch {
+      setError("Unable to create account.")
+    } finally {
+      setLoading(false)
     }
-
-    await signIn("credentials", {
-      email,
-      password,
-      callbackUrl: "/ai-analysis",
-    })
   }
 
   return (
